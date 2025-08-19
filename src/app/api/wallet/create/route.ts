@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const API_BASE_URL = 'http://localhost:3005';
+const API_BASE_URL = process.env.THIRDWEB_ENGINE_URL || 'http://0.0.0.0:3005';
 
 export async function POST(request: Request) {
   try {

@@ -1,51 +1,52 @@
-# USDC Atomic Batch Sample App (CCTP + Thirdweb Engine + Circle Wallets)
 
-> **Important**: This project requires local setup and cannot be run directly in Replit or other online environments. You must fork this repository, download it to your local machine, and run it there.
+# GigChain - Decentralized Task Marketplace
 
-This project demonstrates atomic batch cross-chain USDC transfers using CCTP (Cross-Chain Transfer Protocol) with Thirdweb Engine's Smart Circle Wallets. The demo showcases:
-1. Atomic batch transactions for USDC approval and burnings in a single transaction
-2. Atomic batch minting on destination chain, allowing multiple recipients to receive tokens in a single transaction
-3. Reduced gas costs and improved transaction reliability through batching
+GigChain is a decentralized task marketplace built on Circle's CCTP (Cross-Chain Transfer Protocol) and Thirdweb Engine, enabling gasless USDC payments for micro-tasks with AI-powered verification.
 
 ## Features
 
-- Create and manage Circle Wallets through Thirdweb Engine
-- Atomic batch transactions for both burning and minting:
-  - Single transaction for USDC approval and multiple burns
-  - Single transaction for multiple mints on destination chain
-- Real-time balance tracking and transaction status monitoring
-- Supported testnet chains:
-  - Ethereum Sepolia
-  - Base Sepolia
-  - Avalanche Fuji
-  - Linea Sepolia
+- **Gasless USDC Payments**: Workers receive payments without gas fees using Circle's paymaster
+- **AI Task Verification**: Automated verification of task completion through image/video proof
+- **Cross-Chain Payments**: Seamless payments across multiple blockchain networks
+- **Decentralized Workforce**: Global access without traditional employment barriers
+- **Real-time Task Management**: Browse, create, and complete tasks with instant payouts
 
-## Prerequisites
+## Supported Task Types
 
-- Node.js 18 or higher
-- npm or yarn
-- Docker and Docker Compose installed
-- Thirdweb Engine running locally on port 3005 (see [Setup Thirdweb Engine](#setup-thirdweb-engine) section)
-- Circle Developer Console account ([Sign up here](https://console.circle.com/))
-- Native tokens for gas fees on source chain
-- Testnet USDC from [Circle USDC Faucet](https://faucet.circle.com/)
+- Data Entry
+- Content Moderation
+- Surveys & Research
+- Image/Video Annotation
+- Content Creation
+- Virtual Assistance
 
-## Setup Thirdweb Engine
+## Architecture
 
-This project requires a local instance of Thirdweb Engine running on port 3005. You can set it up in two ways:
+### Core Components
 
-1. **Using Replit Template**:
-   - Visit [Replit Template](https://replit.com/@buildoncircle/Self-Host-Thirdweb-Engine-with-Programmable-Wallet)
-   - Fork the template
-   - **Important**: Download the files to your local machine as this setup requires Docker, which is not supported in Replit's environment
+1. **Task Management System**
+   - Create and browse available tasks
+   - Set requirements and rewards in USDC
+   - Track task progress and completion
 
-2. **Using GitHub Repository**:
-   - Clone the [GitHub Repository](https://github.com/eltontay/thirdweb_engine_circle_pw)
-   - Follow the setup instructions in the repository
+2. **AI Verification Service**
+   - Automated proof verification using AI
+   - Support for image and video submissions
+   - Quality scoring and approval automation
 
-After setting up Thirdweb Engine locally, ensure it's running on port 3005 before starting this demo application.
+3. **Cross-Chain Payment Infrastructure**
+   - CCTP integration for seamless USDC transfers
+   - Gasless transactions using Circle's paymaster
+   - Multi-chain wallet management
 
-## Environment Variables
+4. **Worker Dashboard**
+   - Browse available tasks by category
+   - Submit work and track earnings
+   - Real-time balance updates
+
+## Environment Setup
+
+### Environment Variables
 
 Create a `.env.local` file in the root directory:
 
@@ -53,102 +54,167 @@ Create a `.env.local` file in the root directory:
 NEXT_PUBLIC_THIRDWEB_CREDENTIAL_ID=your_thirdweb_credential_id
 NEXT_PUBLIC_THIRDWEB_ENGINE_ACCESS_TOKEN=your_thirdweb_access_token
 NEXT_PUBLIC_CIRCLE_API_KEY=your_circle_api_key
+THIRDWEB_ENGINE_URL=http://0.0.0.0:3005
 ```
 
-## Installation
+### Required Services
 
-1. Clone the repository:
-```bash
-git clone https://github.com/eltontay/thirdweb-atomic-batch-transaction-cctp.git
-cd thirdweb-atomic-batch-transaction-cctp
-```
+1. **Thirdweb Engine**: Backend wallet management and transaction handling
+2. **Circle Developer Account**: USDC and CCTP integration
+3. **AI Verification Service**: Task completion verification
 
-2. Install dependencies:
+## Getting Started
+
+### 1. Setup Dependencies
+
 ```bash
 npm install
-# or
-yarn install
 ```
 
-3. Start the development server:
+### 2. Configure Environment
+
+Copy `.env.sample` to `.env.local` and fill in your credentials:
+- Get Thirdweb credentials from [Thirdweb Dashboard](https://thirdweb.com/dashboard)
+- Create Circle API key from [Circle Developer Console](https://console.circle.com/)
+
+### 3. Start Thirdweb Engine
+
+Ensure Thirdweb Engine is running on port 3005. For Replit deployment, use:
+- Engine URL: `http://0.0.0.0:3005`
+- Configure proper CORS settings for cross-origin requests
+
+### 4. Run the Application
+
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+The application will be available at `http://localhost:3000` (or your Replit URL).
 
 ## Usage Guide
 
-1. **Initial Setup**:
-   - Create a source wallet on your chosen source chain
-   - Get testnet USDC from the [Circle USDC Faucet](https://faucet.circle.com/)
-   - Fund the source wallet with testnet USDC and native tokens for gas
+### For Task Creators
 
-2. **Adding Recipients**:
-   - Add multiple recipients using the "Add Recipient" button
-   - All recipients must be on the same destination chain
-   - Enter the amount for each recipient
+1. **Create Wallet**: Generate a wallet on your preferred blockchain
+2. **Fund Wallet**: Add USDC and native tokens for gas fees
+3. **Create Tasks**: 
+   - Set clear requirements and deliverables
+   - Define reward amount in USDC
+   - Choose verification method (AI or manual)
+   - Set deadline and maximum workers
 
-3. **Executing Transfer**:
-   - Click "Send Batch Transfer" to initiate the transfer
-   - The app will:
-     1. Create an atomic batch transaction for approval and burns
-     2. Wait for attestations from Circle
-     3. Create atomic batch mint transaction for all recipients
-     4. Show real-time status updates
+### For Workers
 
-## Transaction Flow
+1. **Browse Tasks**: Filter by category, reward, and time commitment
+2. **Accept Task**: Review requirements and accept suitable tasks
+3. **Complete Work**: Follow task guidelines and submit proof
+4. **Get Paid**: Receive instant USDC payment upon verification
 
-1. **Atomic Batch Burn**:
-   - Single transaction that combines:
-     - USDC approval
-     - Multiple burn operations for different recipients
-   - All burns succeed or fail together
+## Supported Networks
 
-2. **Attestation Handling**:
-   - Waits for attestations from Circle
-   - Matches each attestation to its corresponding recipient
+- **Ethereum Sepolia** (Testnet)
+- **Base Sepolia** (Testnet)
+- **Avalanche Fuji** (Testnet)
+- **Linea Sepolia** (Testnet)
 
-3. **Atomic Batch Mint**:
-   - Single transaction containing all mint operations
-   - All recipients receive their tokens in one transaction
-   - All mints succeed or fail together
+*Production deployments will support mainnet versions of these networks.*
 
-## Architecture
+## API Endpoints
 
-The project uses:
-- Next.js 14 with App Router
-- Thirdweb Engine (running locally on Docker) for wallet management and transactions
-- Circle CCTP Protocol for cross-chain transfers
-- Circle Wallets for secure key management
-- Ethers.js for blockchain interactions
-- Tailwind CSS for UI
+### Task Management
+- `POST /api/tasks/create` - Create new task
+- `GET /api/tasks` - List available tasks
+- `POST /api/tasks/submit` - Submit task completion
 
-## Project Structure
+### Wallet Operations
+- `POST /api/wallet/create` - Create new wallet
+- `GET /api/wallet/balance` - Check wallet balance
+- `POST /api/wallet/transfer` - Execute payments
+
+### AI Verification
+- `POST /api/ai/verify` - Submit proof for AI verification
+
+## Development
+
+### Project Structure
 
 ```
 src/
 ├── app/                    # Next.js app directory
-│   ├── api/               # API routes for wallet and attestation handling
-│   └── page.tsx           # Main application component
+│   ├── api/               # API routes
+│   ├── components/        # React components
+│   └── page.tsx           # Main application
 ├── services/              # Business logic
-│   └── cctpService.ts     # CCTP and wallet operations
-└── types/                 # TypeScript type definitions
-    └── cctp.ts           # CCTP and wallet types
+│   ├── taskService.ts     # Task management
+│   ├── cctpService.ts     # CCTP and wallet operations
+│   └── aiVerificationService.ts # AI verification
+└── types/                 # TypeScript definitions
+    ├── gigchain.ts        # GigChain types
+    └── cctp.ts           # CCTP types
 ```
+
+### Key Technologies
+
+- **Next.js 15**: Full-stack React framework
+- **Circle CCTP**: Cross-chain USDC transfers
+- **Thirdweb Engine**: Wallet management and transactions
+- **TypeScript**: Type-safe development
+- **Tailwind CSS**: Utility-first styling
+
+## Security Considerations
+
+- All API keys are stored as environment variables
+- Wallet private keys are managed by Thirdweb Engine
+- AI verification prevents fraud and ensures quality
+- Cross-chain transfers use Circle's audited smart contracts
+
+## Deployment on Replit
+
+This project is optimized for Replit deployment:
+
+1. **Fork this Repl**
+2. **Set Environment Variables** using Replit's Secrets tool
+3. **Configure Thirdweb Engine** to run on `0.0.0.0:3005`
+4. **Deploy** using Replit's deployment feature
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Wallet Creation Failed**
+   - Ensure Thirdweb Engine is running on correct port
+   - Verify environment variables are set correctly
+   - Check network connectivity
+
+2. **Payment Failures**
+   - Confirm sufficient USDC balance
+   - Verify gas fees are available
+   - Check destination address validity
+
+3. **AI Verification Issues**
+   - Ensure proof files meet requirements
+   - Check file size and format limits
+   - Verify API key permissions
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
 
-## Security
+## Support
 
-Please read our [Security Policy](SECURITY.md) for details on our code of conduct and the process for submitting pull requests.
+For questions and support:
+- GitHub Issues: [Create an Issue](https://github.com/yourusername/gigchain/issues)
+- Discord: Join the Circle Developer Community
+- Documentation: [Circle Docs](https://developers.circle.com/)
 
-## Questions & Support
+---
 
-Have questions? Feel free to:
-- Connect with me on X (Twitter): [@txnsheng](https://twitter.com/txnsheng)
-- Join the Circle Discord community: [buildoncircle](https://discord.gg/@buildoncircle)
+**Note**: This is a demonstration project. For production use, implement additional security measures, comprehensive testing, and proper error handling.
