@@ -3,7 +3,7 @@ import { CCTP_CONFIG, WalletResponse, BalanceResponse, TransactionResponse, Atte
 import { Interface, getAddress } from 'ethers';
 import { pad } from 'viem';
 
-const API_BASE_URL = 'http://localhost:3005';
+const API_BASE_URL = process.env.THIRDWEB_ENGINE_URL || 'http://0.0.0.0:3005';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000' as `0x${string}`;
 
 interface CircleAttestationResponse {
