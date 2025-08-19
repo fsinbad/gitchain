@@ -13,10 +13,9 @@ interface CircleAttestationResponse {
 
 export const createWallet = async (chain: string, label: string): Promise<WalletResponse> => {
   const response = await axios.post<WalletResponse>('/api/wallet/create', {
-    type: 'smart:circle',
-    credentialId: process.env.NEXT_PUBLIC_THIRDWEB_CREDENTIAL_ID,
+    chain,
     label,
-    isTestnet: 'true',
+    type: 'local',
   });
   return response.data;
 };

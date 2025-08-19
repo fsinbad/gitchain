@@ -6,6 +6,7 @@ import { createWallet, getUSDCBalance } from '../services/cctpService';
 import { TaskService } from '../services/taskService';
 import { Task, TaskAssignment, WorkerProfile } from '../types/gigchain';
 import { CCTP_CONFIG } from '../types/cctp';
+import WalletInfo from './components/WalletInfo';
 
 export default function GigChainMarketplace() {
   const [walletAddress, setWalletAddress] = useState<string>('');
@@ -218,6 +219,9 @@ export default function GigChainMarketplace() {
               <p className="p-2 bg-gray-700 rounded">${balance}</p>
             </div>
           </div>
+          
+          {/* Wallet Info Component */}
+          <WalletInfo currentWallet={walletAddress} />
         </div>
 
         {/* Navigation Tabs */}

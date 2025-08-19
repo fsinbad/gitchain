@@ -1,36 +1,35 @@
-import { NextResponse } from 'next/server';
 
-const API_BASE_URL = process.env.THIRDWEB_ENGINE_URL || 'http://0.0.0.0:3005';
+import { NextResponse } from 'next/server';
+import { Wallet } from 'ethers';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    console.log('Creating local wallet with params:', body);
     
-    const response = await fetch(`${API_BASE_URL}/backend-wallet/create`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_THIRDWEB_ENGINE_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
+    // Generate a new wallet locally using ethers
+    const wallet = Wallet.createRandom();
+    
+    // Return the same format as Thirdweb Engine would
+    const response = {
+      result: {
+        walletAddress: wallet.address,
+        privateKey: wallet.privateKey, // In production, encrypt this
+        status: 'success'
+      }
+    };
+
+    console.log('Local wallet created:', {
+      address: wallet.address,
+      label: body.label
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Wallet creation error:', errorData);
-      return NextResponse.json(
-        { error: errorData.error?.message || 'Failed to create wallet' },
-        { status: response.status }
-      );
-    }
-
-    const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(response);
   } catch (error) {
-    console.error('Error creating wallet:', error);
+    console.error('Error creating local wallet:', error);
     return NextResponse.json(
       { error: 'Failed to create wallet' },
       { status: 500 }
     );
   }
-} 
+}

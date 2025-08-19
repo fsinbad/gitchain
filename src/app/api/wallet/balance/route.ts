@@ -1,7 +1,6 @@
+
 import { NextResponse } from 'next/server';
 import { CCTP_CONFIG } from '@/types/cctp';
-
-const API_BASE_URL = process.env.THIRDWEB_ENGINE_URL || 'http://0.0.0.0:3005';
 
 export async function GET(request: Request) {
   try {
@@ -29,27 +28,25 @@ export async function GET(request: Request) {
       );
     }
 
-    const response = await fetch(
-      `${API_BASE_URL}/contract/${chainId}/${chainConfig.usdc}/erc20/balance-of?wallet_address=${wallet_address}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_THIRDWEB_ENGINE_ACCESS_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
+    // For demo purposes, return a mock balance
+    // In production, you'd query the actual blockchain
+    const mockBalance = {
+      result: {
+        displayValue: "1.0",
+        symbol: "USDC",
+        name: "USD Coin",
+        decimals: 6,
+        value: "1000000" // 1 USDC in wei (6 decimals)
       }
-    );
+    };
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Balance fetch error:', errorData);
-      return NextResponse.json(
-        { error: errorData.error?.message || 'Failed to get balance' },
-        { status: response.status }
-      );
-    }
+    console.log('Returning mock balance for:', {
+      chainId,
+      wallet_address,
+      balance: mockBalance.result.displayValue
+    });
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(mockBalance);
   } catch (error) {
     console.error('Error getting balance:', error);
     return NextResponse.json(
@@ -57,4 +54,4 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-} 
+}
