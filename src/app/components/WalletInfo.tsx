@@ -25,6 +25,10 @@ export default function WalletInfo() {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          label: 'GigChain Wallet',
+          chain: 'ethereum'
+        }),
       });
 
       if (!response.ok) {
@@ -33,14 +37,14 @@ export default function WalletInfo() {
 
       const data = await response.json();
 
-      if (data.success) {
+      if (data.result) {
         setWallet(prev => ({
           ...prev,
-          address: data.walletAddress
+          address: data.result.walletAddress
         }));
 
         // Fetch balance after creating wallet
-        await fetchBalance(data.walletAddress);
+        await fetchBalance(data.result.walletAddress);
       } else {
         console.error('Failed to create wallet:', data.error);
       }

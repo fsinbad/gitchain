@@ -4,7 +4,18 @@ import { Wallet } from 'ethers';
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    let body = {};
+    
+    // Try to parse JSON body, but don't fail if it's empty
+    try {
+      const text = await request.text();
+      if (text) {
+        body = JSON.parse(text);
+      }
+    } catch (parseError) {
+      console.log('No JSON body provided, using defaults');
+    }
+    
     console.log('Creating local wallet with params:', body);
     
     // Generate a new wallet locally using ethers
@@ -21,7 +32,7 @@ export async function POST(request: Request) {
 
     console.log('Local wallet created:', {
       address: wallet.address,
-      label: body.label
+      label: (body as any).label || 'Default Wallet'
     });
 
     return NextResponse.json(response);
